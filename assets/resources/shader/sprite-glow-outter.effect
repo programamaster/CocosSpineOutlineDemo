@@ -94,7 +94,7 @@ in vec4 v_color;
 #if USE_TEXTURE
   in vec2 v_uv0;
   #pragma builtin(local)
-  layout(set = 2, binding = 11)uniform sampler2D cc_spriteTexture;
+  layout(set = 2, binding = 12)uniform sampler2D cc_spriteTexture;
 #endif
 
 /**
@@ -154,10 +154,15 @@ vec4 getTextureColor(sampler2D mainTexture, vec2 v_uv0) {
   float getAverageAlpha(float dist) {
     float totalAlpha = 0.0;
     // 改为每5度采样一次（72个点）
-    for(float angle = 0.0; angle < 360.0; angle += 5.0) {
-      totalAlpha += getColorAlpha(angle, dist);
-    }
-    return totalAlpha * 0.0138889; // 1/72
+    totalAlpha += getColorAlpha(0.0, dist);
+    totalAlpha += getColorAlpha(45.0, dist);
+    totalAlpha += getColorAlpha(90.0, dist);
+    totalAlpha += getColorAlpha(135.0, dist);
+    totalAlpha += getColorAlpha(180.0, dist);
+    totalAlpha += getColorAlpha(225.0, dist);
+    totalAlpha += getColorAlpha(270.0, dist);
+    totalAlpha += getColorAlpha(315.0, dist);
+    return totalAlpha / 8.0;
   }
   
   // // for 循环写法据说耗性能
@@ -178,9 +183,9 @@ vec4 getTextureColor(sampler2D mainTexture, vec2 v_uv0) {
       return 0.0;
     }
     
-    // 将发光距离分成20个采样点（原为10个）  
+    // 将发光距离分成10个采样点
     float totalAlpha = 0.0;
-    float stepSize = 0.05; // 1.0/20
+    float stepSize = 0.1; // 1.0/10
     
     totalAlpha += getAverageAlpha(glowColorSize * stepSize * 1.0);
     totalAlpha += getAverageAlpha(glowColorSize * stepSize * 2.0);
@@ -192,18 +197,8 @@ vec4 getTextureColor(sampler2D mainTexture, vec2 v_uv0) {
     totalAlpha += getAverageAlpha(glowColorSize * stepSize * 8.0);
     totalAlpha += getAverageAlpha(glowColorSize * stepSize * 9.0);
     totalAlpha += getAverageAlpha(glowColorSize * stepSize * 10.0);
-    totalAlpha += getAverageAlpha(glowColorSize * stepSize * 11.0);
-    totalAlpha += getAverageAlpha(glowColorSize * stepSize * 12.0);
-    totalAlpha += getAverageAlpha(glowColorSize * stepSize * 13.0);
-    totalAlpha += getAverageAlpha(glowColorSize * stepSize * 14.0);
-    totalAlpha += getAverageAlpha(glowColorSize * stepSize * 15.0);
-    totalAlpha += getAverageAlpha(glowColorSize * stepSize * 16.0);
-    totalAlpha += getAverageAlpha(glowColorSize * stepSize * 17.0);
-    totalAlpha += getAverageAlpha(glowColorSize * stepSize * 18.0);
-    totalAlpha += getAverageAlpha(glowColorSize * stepSize * 19.0);
-    totalAlpha += getAverageAlpha(glowColorSize * stepSize * 20.0);
     
-    return totalAlpha * 0.05; // 1.0/20
+    return totalAlpha * 0.1; // 1.0/10
   }
   
 #endif

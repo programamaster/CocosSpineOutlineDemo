@@ -1,4 +1,4 @@
-import { sp } from 'cc';
+import { Material, sp } from 'cc';
 import { Color } from 'cc';
 import { _decorator, Component, Node, RenderTexture, Sprite, Camera, SpriteFrame } from 'cc';
 const { ccclass, property, menu } = _decorator;
@@ -54,6 +54,18 @@ export class RTCapture extends Component {
     @property(sp.Skeleton)
     private comp: sp.Skeleton = null!;
 
+    private _showOutterGlow: boolean = true;
+
+
+    toggleGlowEffect() {
+        this._showOutterGlow = !this._showOutterGlow;
+        const material = this.sprite?.getSharedMaterial(0);
+        if (material) {
+            material.setProperty('SHOW_OUTTER_GLOW', this._showOutterGlow ? 1 : 0);
+        }
+    }
+
+
     start() {
         const spriteFrame = this.sprite.spriteFrame!;
         const sp = new SpriteFrame();
@@ -70,12 +82,16 @@ export class RTCapture extends Component {
 
         const renderTex = RTCapture._renderTex = new RenderTexture();
         renderTex.reset({
-            width: 1024,
-            height: 1024,
+            width: 256,
+            height: 256,
         });
         this.camera.targetTexture = renderTex;
         sp.texture = renderTex;
         this.sprite.spriteFrame = sp;
+        this.sprite.node.setScale(2, 2); // 放大2倍（根据需求调整值）
+
+
+
 
         const material = this.sprite.getSharedMaterial(0);
         if (material) {

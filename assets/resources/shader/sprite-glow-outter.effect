@@ -183,22 +183,17 @@ vec4 getTextureColor(sampler2D mainTexture, vec2 v_uv0) {
       return 0.0;
     }
     
-    // 将发光距离分成10个采样点
+    // 将发光距离分成5个采样点
     float totalAlpha = 0.0;
-    float stepSize = 0.1; // 1.0/10
+    float stepSize = 0.2; // 1.0/5
     
     totalAlpha += getAverageAlpha(glowColorSize * stepSize * 1.0);
     totalAlpha += getAverageAlpha(glowColorSize * stepSize * 2.0);
     totalAlpha += getAverageAlpha(glowColorSize * stepSize * 3.0);
     totalAlpha += getAverageAlpha(glowColorSize * stepSize * 4.0);
     totalAlpha += getAverageAlpha(glowColorSize * stepSize * 5.0);
-    totalAlpha += getAverageAlpha(glowColorSize * stepSize * 6.0);
-    totalAlpha += getAverageAlpha(glowColorSize * stepSize * 7.0);
-    totalAlpha += getAverageAlpha(glowColorSize * stepSize * 8.0);
-    totalAlpha += getAverageAlpha(glowColorSize * stepSize * 9.0);
-    totalAlpha += getAverageAlpha(glowColorSize * stepSize * 10.0);
     
-    return totalAlpha * 0.1; // 1.0/10
+    return totalAlpha * 0.2; // 1.0/5
   }
   
 #endif

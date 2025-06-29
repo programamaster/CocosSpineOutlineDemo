@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2020 Xiamen Yaji Software Co., Ltd.
+
 CCEffect %{
   techniques:
   - passes:
@@ -17,6 +17,8 @@ CCEffect %{
         cullMode: none
       properties:
         alphaThreshold: { value: 0.5 }
+        otherTexture:       { value: white , editor: { visible: true }}
+        otherWorldPosition: { value: [0, 0, 0,0], editor: { visible: true } }
 }%
 
 CCProgram sprite-vs %{
@@ -34,9 +36,11 @@ CCProgram sprite-vs %{
 
   out vec4 color;
   out vec2 uv0;
+  out vec2 fragWorldPos;
 
   vec4 vert () {
     vec4 pos = vec4(a_position, 1);
+    fragWorldPos = pos.xy;
 
     #if USE_LOCAL
       pos = cc_matWorld * pos;
@@ -65,7 +69,13 @@ CCProgram sprite-fs %{
   #include <builtin/internal/embedded-alpha>
   #include <builtin/internal/alpha-test>
 
+  uniform sampler2D otherTexture;
+  uniform params{
+    vec4 otherWorldPosition; //xy为坐标 zw为纹理的宽高
+  };
+
   in vec4 color;
+  in vec2 fragWorldPos;
 
   #if USE_TEXTURE
     in vec2 uv0;
@@ -80,10 +90,24 @@ CCProgram sprite-fs %{
       o *= CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
       #if IS_GRAY
         float gray  = 0.2126 * o.r + 0.7152 * o.g + 0.0722 * o.b;
-        o.r = o.g = o.b = 1.0;
+        o.r = o.g = o.b = gray;
       #endif
     #endif
+    // 计算当前片元在other纹理中的UV坐标
+    // otherWorldPosition.xy是纹理中心坐标，需要转换为左下角坐标
+    vec2 otherBottomLeft = otherWorldPosition.xy - otherWorldPosition.zw * 0.5;
+    vec2 otherUV = (fragWorldPos - otherBottomLeft) / otherWorldPosition.zw;
 
+    // 检查UV坐标是否在有效范围内
+    if (otherUV.x >= 0.0 && otherUV.x <= 1.0 && otherUV.y >= 0.0 && otherUV.y <= 1.0) {
+      // 采样other纹理
+      vec4 otherColor = texture(otherTexture, otherUV);
+      
+      // 如果当前像素透明度不为0且other纹理的当前像素透明度不为0
+      if (o.a > 0.0 && otherColor.a > 0.0) {
+        o.a = 0.25;
+      }
+    }  
     o *= color;
     ALPHA_TEST(o);
     return o;

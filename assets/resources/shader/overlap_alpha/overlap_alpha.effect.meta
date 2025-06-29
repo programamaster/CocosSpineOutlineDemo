@@ -2,18 +2,14 @@
   "ver": "1.7.1",
   "importer": "effect",
   "imported": true,
-  "uuid": "53f03400-f54c-4888-9307-c2c72eeb1e01",
+  "uuid": "b402587b-7e50-461e-8124-0ad5818f625d",
   "files": [
     ".json"
   ],
   "subMetas": {},
   "userData": {
     "combinations": [
-      {
-        "IS_WHITE": [
-          true
-        ]
-      }
+      {}
     ]
   }
 }

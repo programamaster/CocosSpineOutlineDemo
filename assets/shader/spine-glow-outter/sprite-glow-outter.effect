@@ -18,11 +18,10 @@ techniques:
           alphaThreshold: { value: 0.5 }
           # 自定义参数
           # 发光颜色
-          glowColor:
-            {
+          glowColor: {
               value: [1.0, 1.0, 0.0, 1.0],
               editor: { type: color, tooltip: "发光颜色" },
-            }
+            } #alpha=1.0启用发光
           # 发光宽度
           glowColorSize:
             { value: 0.15, editor: { tooltip: "发光宽度", range: [0.0, 1.0] } }
@@ -119,7 +118,7 @@ vec4 getTextureColor(sampler2D mainTexture, vec2 v_uv0) {
 #if SHOW_OUTTER_GLOW
   
   uniform glow {
-    // 发光颜色
+    // 发光颜色 (alpha>0时启用发光)
     vec4 glowColor;
     // 发光范围
     float glowColorSize;
@@ -153,7 +152,7 @@ vec4 getTextureColor(sampler2D mainTexture, vec2 v_uv0) {
   */
   float getAverageAlpha(float dist) {
     float totalAlpha = 0.0;
-    // 改为每5度采样一次（72个点）
+    // 改为每45度采样一次（8个点）
     totalAlpha += getColorAlpha(0.0, dist);
     totalAlpha += getColorAlpha(45.0, dist);
     totalAlpha += getColorAlpha(90.0, dist);
@@ -183,17 +182,14 @@ vec4 getTextureColor(sampler2D mainTexture, vec2 v_uv0) {
       return 0.0;
     }
     
-    // 将发光距离分成5个采样点
+    // 将发光距离分成2个采样点
     float totalAlpha = 0.0;
-    float stepSize = 0.2; // 1.0/5
+    float stepSize = 0.5; // 1.0/2
     
     totalAlpha += getAverageAlpha(glowColorSize * stepSize * 1.0);
     totalAlpha += getAverageAlpha(glowColorSize * stepSize * 2.0);
-    totalAlpha += getAverageAlpha(glowColorSize * stepSize * 3.0);
-    totalAlpha += getAverageAlpha(glowColorSize * stepSize * 4.0);
-    totalAlpha += getAverageAlpha(glowColorSize * stepSize * 5.0);
     
-    return totalAlpha * 0.2; // 1.0/5
+    return totalAlpha * 0.5; // 1.0/2
   }
   
 #endif
@@ -209,42 +205,45 @@ vec4 frag() {
   #endif
   
   #if SHOW_OUTTER_GLOW
-    // 获取发光透明度    
-    // 此时我们得到的是内部透明度为1，靠近边缘的为接近0的透明度，其他位置为0的透明度    
-    float alpha = getGlowAlpha();
-    
-    // 而外发光是从边缘开始的，那么什么算是边缘呢？    
-    // 一般图像边缘是存在渐变，即从图像内 1.0-> 0.0 图像外，那么发光边缘我们可以这样子定义    
-    // 当该点的透明度小于一个阈值，那么我们就当该点为一个发光点    
-    if (alpha <= glowThreshold) {
-      // 然后以阈值作为标量，重新将透明度归一化    
-      alpha = alpha / glowThreshold;
+    if (glowColor.a > 0.0) { // 用alpha通道作为开关
+      // 获取发光透明度    
+      // 此时我们得到的是内部透明度为1，靠近边缘的为接近0的透明度，其他位置为0的透明度    
+      float alpha = getGlowAlpha();
       
-      // 给点调料，让靠近边缘的更加亮    
-      alpha = -1.0 * (alpha - 1.0) * (alpha - 1.0) * (alpha - 1.0) * (alpha - 1.0) + 1.0;
-    } else {
-      // 然后这里大于阈值的基本就是便是图像本身，不需要发光，那么将发光透明度置为0    
-      alpha = 0.0;
+      // 而外发光是从边缘开始的，那么什么算是边缘呢？    
+      // 一般图像边缘是存在渐变，即从图像内 1.0-> 0.0 图像外，那么发光边缘我们可以这样子定义    
+      // 当该点的透明度小于一个阈值，那么我们就当该点为一个发光点    
+      if (alpha <= glowThreshold) {
+        // 然后以阈值作为标量，重新将透明度归一化    
+        alpha = alpha / glowThreshold;
+        
+        // 给点调料，让靠近边缘的更加亮    
+        alpha = -1.0 * (alpha - 1.0) * (alpha - 1.0) * (alpha - 1.0) * (alpha - 1.0) + 1.0;
+      } else {
+        // 然后这里大于阈值的基本就是便是图像本身，不需要发光，那么将发光透明度置为0    
+        alpha = 0.0;
+      }
+      
+      // 忽略阈值，直接处理    
+      // // 给点调料，让靠近边缘的更加亮    
+      // alpha = -1.0 * (alpha - 1.0) * (alpha - 1.0) * (alpha - 1.0) * (alpha - 1.0) + 1.0;    
+      
+      // 外发光颜色    
+      vec4 color_dest = glowColor * alpha;
+      vec4 color_src = o;
+      
+      // 本次我们将先画外发光作为背景，然后在上方放图像      
+      // 最终选择的混合模式如下：    
+      //    
+      // （原图像）color_src: GL_SRC_ALPHA    
+      // （外发光）color_dest: GL_ONE_MINUS_SRC_ALPHAA    
+      //     
+      // 即最终颜色如下：    
+      // color_src * GL_SRC_ALPHA + color_dest * GL_ONE_MINUS_SRC_ALPHAA    
+      
+      o = color_src * color_src.a + color_dest * (1.0 - color_src.a);
     }
     
-    // 忽略阈值，直接处理    
-    // // 给点调料，让靠近边缘的更加亮    
-    // alpha = -1.0 * (alpha - 1.0) * (alpha - 1.0) * (alpha - 1.0) * (alpha - 1.0) + 1.0;    
-    
-    // 外发光颜色    
-    vec4 color_dest = glowColor * alpha;
-    vec4 color_src = o;
-    
-    // 本次我们将先画外发光作为背景，然后在上方放图像      
-    // 最终选择的混合模式如下：    
-    //    
-    // （原图像）color_src: GL_SRC_ALPHA    
-    // （外发光）color_dest: GL_ONE_MINUS_SRC_ALPHAA    
-    //     
-    // 即最终颜色如下：    
-    // color_src * GL_SRC_ALPHA + color_dest * GL_ONE_MINUS_SRC_ALPHAA    
-    
-    o = color_src * color_src.a + color_dest * (1.0 - color_src.a);
   #endif
   
   o *= v_color;

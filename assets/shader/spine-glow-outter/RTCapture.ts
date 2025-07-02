@@ -1,4 +1,4 @@
-import { Material, sp } from 'cc';
+import { Material, Slider, sp } from 'cc';
 import { Color } from 'cc';
 import { _decorator, Component, Node, RenderTexture, Sprite, Camera, SpriteFrame } from 'cc';
 const { ccclass, property, menu } = _decorator;
@@ -10,6 +10,11 @@ export class RTCapture extends Component {
     public sprite: Sprite = null!;
     @property(Camera)
     public camera: Camera = null!;
+
+    @property(Slider)
+    public glowThresholdS: Slider = null!;
+    @property(Slider)
+    public glowColorSizeS: Slider = null!;
 
     static _renderTex: RenderTexture | null = null;
 
@@ -82,13 +87,13 @@ export class RTCapture extends Component {
 
         const renderTex = RTCapture._renderTex = new RenderTexture();
         renderTex.reset({
-            width: 256,
-            height: 256,
+            width: 512,
+            height: 512,
         });
         this.camera.targetTexture = renderTex;
         sp.texture = renderTex;
         this.sprite.spriteFrame = sp;
-        this.sprite.node.setScale(2, 2); // 放大2倍（根据需求调整值）
+        this.sprite.node.setScale(1, 1); // 放大2倍（根据需求调整值）
 
 
 
@@ -135,6 +140,33 @@ export class RTCapture extends Component {
             RTCapture._renderTex.destroy();
             RTCapture._renderTex = null;
         }
+    }
+
+    onclickLight() {
+        const material = this.sprite?.getSharedMaterial(0);
+        if (material) {
+            const currentAlpha = this._glowColor.a;
+            this._glowColor.a = currentAlpha === 255 ? 0 : 255;
+            material.setProperty('glowColor', this._glowColor);
+        }
+    }
+
+    onclickRandomColor() {
+        const material = this.sprite?.getSharedMaterial(0);
+        if (material) {
+            this._glowColor.r = Math.floor(Math.random() * 256);
+            this._glowColor.g = Math.floor(Math.random() * 256);
+            this._glowColor.b = Math.floor(Math.random() * 256);
+            material.setProperty('glowColor', this._glowColor);
+        }
+    }
+
+    onGlowThresholdSliderChange() {
+        this.glowThreshold = this.glowThresholdS.progress;
+    }
+
+    onGlowColorSizeSliderChange() {
+        this.glowColorSize = this.glowColorSizeS.progress/30;
     }
 }
 

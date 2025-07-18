@@ -11,71 +11,86 @@ enum FlashAnimateSate {
 export class Spinewhitetest extends Component {
     @property(sp.Skeleton)
     private skeletonComp: sp.Skeleton = null;
-    private flashAnimateState: FlashAnimateSate = FlashAnimateSate.none;
-    private curFlashPercent: number = 0;
+    @property(sp.Skeleton)
+    private skeletonComp1: sp.Skeleton = null;
+
+    // Separate states for each skeleton
+    private flashAnimateStates: [FlashAnimateSate, FlashAnimateSate] = [FlashAnimateSate.none, FlashAnimateSate.none];
+    private curFlashPercents: [number, number] = [0, 0];
+    private currentAnimIndices: [number, number] = [0, 0];
+    private isPlayings: [boolean, boolean] = [false, false];
+
     start() {
-        this.playAnimationsInSequence();
-        this.changeFlashPercent(0.0);
+        this.playAnimationsInSequence(this.skeletonComp, 0);
+        this.playAnimationsInSequence(this.skeletonComp1, 1);
+        this.changeFlashPercent(this.skeletonComp, 0.0, 0);
     }
 
     protected update(dt: number): void {
-        if (this.flashAnimateState === FlashAnimateSate.fadeIn) {  // 淡入
-            if (this.curFlashPercent >= 1) {
-                this.flashAnimateState = FlashAnimateSate.fadeOut;
-                this.curFlashPercent = 1;
-            } else {
-                this.curFlashPercent += dt * 5;
-                this.changeFlashPercent(this.curFlashPercent);
-            }
-        } else if (this.flashAnimateState === FlashAnimateSate.fadeOut) {  // 淡出
-            if (this.curFlashPercent <= 0) {
-                this.flashAnimateState = FlashAnimateSate.none;
-                this.curFlashPercent = 0;
-            } else {
-                this.curFlashPercent -= dt * 5;
-                this.changeFlashPercent(this.curFlashPercent);
+        // Process both skeletons
+        for (let i = 0; i < 2; i++) {
+            const skeleton = i === 0 ? this.skeletonComp : this.skeletonComp1;
+            if (this.flashAnimateStates[i] === FlashAnimateSate.fadeIn) {
+                if (this.curFlashPercents[i] >= 1) {
+                    this.flashAnimateStates[i] = FlashAnimateSate.fadeOut;
+                    this.curFlashPercents[i] = 1;
+                } else {
+                    this.curFlashPercents[i] += dt * 5;
+                    this.changeFlashPercent(skeleton, this.curFlashPercents[i], i);
+                }
+            } else if (this.flashAnimateStates[i] === FlashAnimateSate.fadeOut) {
+                if (this.curFlashPercents[i] <= 0) {
+                    this.flashAnimateStates[i] = FlashAnimateSate.none;
+                    this.curFlashPercents[i] = 0;
+                } else {
+                    this.curFlashPercents[i] -= dt * 5;
+                    this.changeFlashPercent(skeleton, this.curFlashPercents[i], i);
+                }
             }
         }
     }
 
     private startAttack(): void {
-        this.changeFlashPercent(0.0);  // 先重置
-        this.flashAnimateState = FlashAnimateSate.fadeIn;
+        const index = 0;
+        const skeleton = index === 0 ? this.skeletonComp : this.skeletonComp1;
+        this.changeFlashPercent(skeleton, 0.0, index);
+        this.flashAnimateStates[index] = FlashAnimateSate.fadeIn;
     }
 
-    // 改变 mixPercent 的值
-    private changeFlashPercent(percent: number) {
-        const spineMatCaches = this.skeletonComp['_materialCache'];
+    private startAttack1(): void {
+        let index = 1;
+        const skeleton = index === 0 ? this.skeletonComp : this.skeletonComp1;
+        this.changeFlashPercent(skeleton, 0.0, index);
+        this.flashAnimateStates[index] = FlashAnimateSate.fadeIn;
+    }
+
+    private changeFlashPercent(skeletonComp: sp.Skeleton, percent: number, index: number) {
+        const spineMatCaches = skeletonComp['_materialCache'];
         for (let k in spineMatCaches) {
             spineMatCaches[k].setProperty('mixPercent', percent);
         }
     }
 
-    private currentAnimIndex = 0;
-    private isPlaying = false;
+    playAnimationsInSequence(skeletonComp: sp.Skeleton, index: number) {
+        if (this.isPlayings[index] || !skeletonComp.skeletonData) return;
 
-    playAnimationsInSequence() {
-        if (this.isPlaying || !this.skeletonComp.skeletonData) return;
-
-        this.isPlaying = true;
-        const anims = this.skeletonComp.skeletonData.getRuntimeData()!.animations;
+        this.isPlayings[index] = true;
+        const anims = skeletonComp.skeletonData.getRuntimeData()!.animations;
 
         const playNext = () => {
-            if (this.currentAnimIndex >= anims.length) {
-                this.currentAnimIndex = 0; // Loop back to first animation
+            if (this.currentAnimIndices[index] >= anims.length) {
+                this.currentAnimIndices[index] = 0;
             }
 
-            const animName = anims[this.currentAnimIndex].name;
-            this.skeletonComp.setAnimation(0, animName, false);
+            const animName = anims[this.currentAnimIndices[index]].name;
+            skeletonComp.setAnimation(0, animName, false);
 
-            this.currentAnimIndex++;
-            this.skeletonComp.setCompleteListener(() => {
+            this.currentAnimIndices[index]++;
+            skeletonComp.setCompleteListener(() => {
                 playNext();
             });
         };
 
         playNext();
     }
-
 }
-

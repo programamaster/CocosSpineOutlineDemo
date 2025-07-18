@@ -1,0 +1,104 @@
+
+truck_02.png
+size: 267,267
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Cab
+  rotate: false
+  xy: 1, 85
+  size: 184, 50
+  orig: 184, 223
+  offset: 0, 0
+  index: -1
+blood/Cab_01
+  rotate: false
+  xy: 1, 85
+  size: 184, 50
+  orig: 184, 223
+  offset: 0, 0
+  index: -1
+blood/Cab_03
+  rotate: false
+  xy: 1, 85
+  size: 184, 50
+  orig: 184, 223
+  offset: 0, 0
+  index: -1
+License
+  rotate: true
+  xy: 210, 94
+  size: 81, 25
+  orig: 81, 25
+  offset: 0, 0
+  index: -1
+Trunk_01
+  rotate: false
+  xy: 1, 136
+  size: 193, 130
+  orig: 193, 130
+  offset: 0, 0
+  index: -1
+Trunk_DL_01
+  rotate: false
+  xy: 210, 8
+  size: 14, 85
+  orig: 14, 85
+  offset: 0, 0
+  index: -1
+Trunk_DL_02
+  rotate: false
+  xy: 195, 176
+  size: 23, 90
+  orig: 23, 90
+  offset: 0, 0
+  index: -1
+Trunk_DR_01
+  rotate: false
+  xy: 225, 8
+  size: 14, 85
+  orig: 14, 85
+  offset: 0, 0
+  index: -1
+Trunk_DR_02
+  rotate: false
+  xy: 219, 176
+  size: 23, 90
+  orig: 23, 90
+  offset: 0, 0
+  index: -1
+Trunk_D_03
+  rotate: false
+  xy: 1, 45
+  size: 184, 39
+  orig: 184, 39
+  offset: 0, 0
+  index: -1
+blood/License
+  rotate: true
+  xy: 236, 94
+  size: 81, 25
+  orig: 81, 25
+  offset: 0, 0
+  index: -1
+blood/Trunk_DL_02
+  rotate: false
+  xy: 243, 176
+  size: 23, 90
+  orig: 23, 90
+  offset: 0, 0
+  index: -1
+blood/Trunk_DR_02
+  rotate: false
+  xy: 186, 45
+  size: 23, 90
+  orig: 23, 90
+  offset: 0, 0
+  index: -1
+blood/Trunk_D_03
+  rotate: false
+  xy: 1, 5
+  size: 184, 39
+  orig: 184, 39
+  offset: 0, 0
+  index: -1

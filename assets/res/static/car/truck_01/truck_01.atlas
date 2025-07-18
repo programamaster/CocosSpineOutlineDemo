@@ -1,0 +1,272 @@
+
+truck_01.png
+size: 632,632
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+BL_Wheel_01
+  rotate: true
+  xy: 1, 1
+  size: 28, 65
+  orig: 28, 65
+  offset: 0, 0
+  index: -1
+FL_Wheel_01
+  rotate: true
+  xy: 1, 1
+  size: 28, 65
+  orig: 28, 65
+  offset: 0, 0
+  index: -1
+BL_Wheel_02
+  rotate: false
+  xy: 591, 5
+  size: 37, 72
+  orig: 37, 72
+  offset: 0, 0
+  index: -1
+FL_Wheel_02
+  rotate: false
+  xy: 591, 5
+  size: 37, 72
+  orig: 37, 72
+  offset: 0, 0
+  index: -1
+BR_Wheel_01
+  rotate: true
+  xy: 67, 1
+  size: 28, 65
+  orig: 28, 65
+  offset: 0, 0
+  index: -1
+FR_Wheel_01
+  rotate: true
+  xy: 67, 1
+  size: 28, 65
+  orig: 28, 65
+  offset: 0, 0
+  index: -1
+BR_Wheel_02
+  rotate: true
+  xy: 493, 113
+  size: 37, 72
+  orig: 37, 72
+  offset: 0, 0
+  index: -1
+FR_Wheel_02
+  rotate: true
+  xy: 493, 113
+  size: 37, 72
+  orig: 37, 72
+  offset: 0, 0
+  index: -1
+Cab
+  rotate: false
+  xy: 1, 30
+  size: 184, 223
+  orig: 184, 223
+  offset: 0, 0
+  index: -1
+Console
+  rotate: false
+  xy: 395, 349
+  size: 156, 58
+  orig: 156, 58
+  offset: 0, 0
+  index: -1
+Floor_01_L
+  rotate: false
+  xy: 512, 151
+  size: 33, 146
+  orig: 33, 146
+  offset: 0, 0
+  index: -1
+Floor_01_R
+  rotate: true
+  xy: 423, 598
+  size: 33, 146
+  orig: 33, 146
+  offset: 0, 0
+  index: -1
+Floor_03
+  rotate: false
+  xy: 238, 265
+  size: 156, 142
+  orig: 156, 142
+  offset: 0, 0
+  index: -1
+FrontBumper
+  rotate: false
+  xy: 457, 557
+  size: 116, 40
+  orig: 116, 40
+  offset: 0, 0
+  index: -1
+M_L
+  rotate: false
+  xy: 395, 268
+  size: 38, 29
+  orig: 38, 29
+  offset: 0, 0
+  index: -1
+M_R
+  rotate: false
+  xy: 434, 268
+  size: 38, 29
+  orig: 38, 29
+  offset: 0, 0
+  index: -1
+RearBumper
+  rotate: false
+  xy: 371, 38
+  size: 206, 47
+  orig: 206, 47
+  offset: 0, 0
+  index: -1
+Steering
+  rotate: false
+  xy: 546, 241
+  size: 31, 30
+  orig: 31, 30
+  offset: 0, 0
+  index: -1
+TailPipe_L
+  rotate: true
+  xy: 548, 272
+  size: 37, 26
+  orig: 37, 26
+  offset: 0, 0
+  index: -1
+TailPipe_R
+  rotate: true
+  xy: 548, 272
+  size: 37, 26
+  orig: 37, 26
+  offset: 0, 0
+  index: -1
+Track
+  rotate: false
+  xy: 1, 254
+  size: 236, 377
+  orig: 238, 379
+  offset: 1, 1
+  index: -1
+Trunk_02
+  rotate: true
+  xy: 371, 86
+  size: 178, 121
+  orig: 178, 121
+  offset: 0, 0
+  index: -1
+blood/BL_Wheel_01
+  rotate: true
+  xy: 133, 1
+  size: 28, 65
+  orig: 28, 65
+  offset: 0, 0
+  index: -1
+blood/BR_Wheel_01
+  rotate: true
+  xy: 199, 1
+  size: 28, 65
+  orig: 28, 65
+  offset: 0, 0
+  index: -1
+blood/Cab_01
+  rotate: false
+  xy: 186, 30
+  size: 184, 223
+  orig: 184, 223
+  offset: 0, 0
+  index: -1
+blood/Cab_03
+  rotate: false
+  xy: 238, 408
+  size: 184, 223
+  orig: 184, 223
+  offset: 0, 0
+  index: -1
+blood/FL_Wheel_01
+  rotate: true
+  xy: 265, 1
+  size: 28, 65
+  orig: 28, 65
+  offset: 0, 0
+  index: -1
+blood/FR_Wheel_01
+  rotate: true
+  xy: 331, 1
+  size: 28, 65
+  orig: 28, 65
+  offset: 0, 0
+  index: -1
+blood/Floor_01_L
+  rotate: false
+  xy: 423, 451
+  size: 33, 146
+  orig: 33, 146
+  offset: 0, 0
+  index: -1
+blood/Floor_01_R
+  rotate: true
+  xy: 423, 417
+  size: 33, 146
+  orig: 33, 146
+  offset: 0, 0
+  index: -1
+blood/FrontBumper
+  rotate: false
+  xy: 457, 516
+  size: 116, 40
+  orig: 116, 40
+  offset: 0, 0
+  index: -1
+blood/M_L
+  rotate: false
+  xy: 473, 268
+  size: 38, 29
+  orig: 38, 29
+  offset: 0, 0
+  index: -1
+blood/M_R
+  rotate: true
+  xy: 548, 310
+  size: 38, 29
+  orig: 38, 29
+  offset: 0, 0
+  index: -1
+blood/RearBumper
+  rotate: true
+  xy: 578, 231
+  size: 206, 47
+  orig: 206, 47
+  offset: 0, 0
+  index: -1
+blood/nailboard_board_01
+  rotate: false
+  xy: 397, 1
+  size: 193, 36
+  orig: 193, 36
+  offset: 0, 0
+  index: -1
+blood/nailboard_nail_01
+  rotate: false
+  xy: 395, 298
+  size: 152, 50
+  orig: 152, 50
+  offset: 0, 0
+  index: -1
+nailboard_board
+  rotate: true
+  xy: 591, 438
+  size: 193, 36
+  orig: 193, 36
+  offset: 0, 0
+  index: -1
+nailboard_nail
+  rotate: true
+  xy: 578, 78
+  size: 152, 51
+  orig: 152, 51
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,20 @@
+
+nvhushi_larm.png
+size: 16,16
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+l_forearm01
+  rotate: false
+  xy: 9, 1
+  size: 5, 13
+  orig: 7, 15
+  offset: 1, 1
+  index: -1
+l_upperarm01
+  rotate: false
+  xy: 1, 1
+  size: 7, 13
+  orig: 9, 15
+  offset: 1, 1
+  index: -1

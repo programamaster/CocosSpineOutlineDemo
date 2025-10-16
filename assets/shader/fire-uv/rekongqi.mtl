@@ -5,15 +5,13 @@
   "__editorExtras__": {},
   "_native": "",
   "_effectAsset": {
-    "__uuid__": "e43fb049-cdbb-4c82-8542-8b582b487d10",
+    "__uuid__": "504b41ba-42a7-4aa0-8fd0-22fbf2afe9c0",
     "__expectedType__": "cc.EffectAsset"
   },
   "_techIdx": 0,
   "_defines": [
     {
-      "USE_TEXTURE": true,
-      "SAMPLE_FROM_RT": true,
-      "SHOW_OUTTER_GLOW": true
+      "USE_TEXTURE": true
     }
   ],
   "_states": [
@@ -29,17 +27,12 @@
   ],
   "_props": [
     {
-      "glowColor": {
-        "__type__": "cc.Color",
-        "r": 255,
-        "g": 215,
-        "b": 0,
-        "a": 255
+      "nosieTexture": {
+        "__uuid__": "c76702fe-4ae6-4819-96bf-6512edc393b1@6c48a",
+        "__expectedType__": "cc.Texture2D"
       },
-      "glowalphaThreshold": 0.95,
-      "glowColoWidth": 0.01,
-      "glowThreshold": 0,
-      "glowLerpRate": 0.85
+      "strength": 0.005,
+      "speed": 0.3
     }
   ]
 }
